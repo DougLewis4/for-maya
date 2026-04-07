@@ -82,6 +82,11 @@ const SECRET_MESSAGE = {
 // ── Date Helpers ──────────────────────────────────────────────────────────
 
 function getTripDay() {
+  // Dev preview: add ?day=5 to the URL to simulate any day without affecting the live app
+  const params = new URLSearchParams(window.location.search);
+  const preview = parseInt(params.get('day'), 10);
+  if (!isNaN(preview) && preview >= 1 && preview <= 12) return preview;
+
   const today = new Date();
   today.setHours(0, 0, 0, 0);
   const start = new Date(TRIP_START);
