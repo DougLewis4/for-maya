@@ -402,6 +402,19 @@ header {
   justify-content: center;
 }
 
+.message-panel-photo {
+  width: 100%;
+  max-height: 280px;
+  object-fit: cover;
+  border-radius: 14px;
+  margin-bottom: 24px;
+  display: block;
+}
+
+.message-panel-body {
+  justify-content: flex-start;
+}
+
 .message-panel-label {
   font-size: 0.7rem;
   font-weight: 700;

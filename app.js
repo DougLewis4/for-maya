@@ -104,6 +104,11 @@ function formatDate(dayNumber) {
 // ── Message Detail Panel ──────────────────────────────────────────────────
 
 function openMessagePanel(entry) {
+  const photo = document.getElementById('message-panel-photo');
+  photo.src   = 'photos/day' + entry.day + '.jpg';
+  photo.alt   = 'Day ' + entry.day;
+  photo.style.display = 'block';
+
   document.getElementById('message-panel-label').textContent = entry.label;
   document.getElementById('message-panel-date').textContent  = formatDate(entry.day);
   document.getElementById('message-panel-text').textContent  = entry.message;
