@@ -1,4 +1,4 @@
-const CACHE_NAME = 'for-maya-v1';
+const CACHE_NAME = 'for-maya-v2';
 const ASSETS = [
   '/',
   '/index.html',
