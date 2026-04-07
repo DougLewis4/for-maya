@@ -305,35 +305,35 @@ function initInstallBanner() {
 // ── Weather ───────────────────────────────────────────────────────────────
 
 const CITIES = {
-  marrakech: { lat: 31.6295, lon: -7.9811,   tz: 'Africa/Casablanca',    label: 'time-marrakech', el: 'weather-marrakech' },
-  sandiego:  { lat: 32.7157, lon: -117.1611, tz: 'America/Los_Angeles',  label: 'time-sandiego',  el: 'weather-sandiego'  }
+  marrakech: { name: 'Marrakech',  tz: 'Africa/Casablanca',   label: 'time-marrakech', el: 'weather-marrakech' },
+  sandiego:  { name: 'San Diego',  tz: 'America/Los_Angeles', label: 'time-sandiego',  el: 'weather-sandiego'  }
 };
 
 const WEATHER_CACHE_KEY = 'weather_cache_v1';
 const CACHE_MAX_AGE_MS  = 3 * 60 * 60 * 1000; // refresh every 3 hours
 
-const WMO_ICONS = {
-  0: '☀️', 1: '🌤️', 2: '⛅', 3: '☁️',
-  45: '🌫️', 48: '🌫️',
-  51: '🌦️', 53: '🌦️', 55: '🌧️',
-  61: '🌧️', 63: '🌧️', 65: '🌧️',
-  71: '❄️', 73: '❄️', 75: '❄️', 77: '❄️',
-  80: '🌧️', 81: '🌧️', 82: '🌧️',
-  85: '❄️', 86: '❄️',
-  95: '⛈️', 96: '⛈️', 99: '⛈️'
-};
-
-function weatherIcon(code) {
-  return WMO_ICONS[code] || '🌡️';
+function weatherIcon(desc) {
+  const d = desc.toLowerCase();
+  if (d.includes('thunder'))                    return '⛈️';
+  if (d.includes('snow') || d.includes('bliz')) return '❄️';
+  if (d.includes('sleet') || d.includes('ice')) return '🌨️';
+  if (d.includes('heavy rain'))                 return '🌧️';
+  if (d.includes('rain') || d.includes('driz')) return '🌦️';
+  if (d.includes('fog')  || d.includes('mist')) return '🌫️';
+  if (d.includes('overcast') || d.includes('cloudy')) return '☁️';
+  if (d.includes('partly'))                     return '⛅';
+  if (d.includes('sunny') || d.includes('clear')) return '☀️';
+  return '🌡️';
 }
 
 async function fetchWeather(city) {
-  const url = `https://api.open-meteo.com/v1/forecast?latitude=${city.lat}&longitude=${city.lon}&current=temperature_2m,weather_code&temperature_unit=fahrenheit&timezone=auto`;
+  const url  = `https://wttr.in/${encodeURIComponent(city.name)}?format=j1`;
   const res  = await fetch(url);
   const data = await res.json();
+  const cur  = data.current_condition[0];
   return {
-    temp: Math.round(data.current.temperature_2m),
-    code: data.current.weather_code
+    temp: cur.temp_F,
+    desc: cur.weatherDesc[0].value
   };
 }
 
@@ -364,7 +364,7 @@ function renderWeather(data) {
     const w    = data[key];
     const el   = document.getElementById(city.el);
     if (!el || !w) continue;
-    el.querySelector('.weather-temp').textContent = weatherIcon(w.code) + ' ' + w.temp + '°F';
+    el.querySelector('.weather-temp').textContent = weatherIcon(w.desc) + ' ' + w.temp + '°F';
   }
 }
 
