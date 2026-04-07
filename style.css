@@ -262,9 +262,9 @@ header {
   transition: width 0.4s ease;
 }
 
-.stat-hunger  .stat-bar-fill { background: #e8a87c; }
-.stat-happy   .stat-bar-fill { background: #a8d5a2; }
-.stat-energy  .stat-bar-fill { background: #87b8d4; }
+.stat-hunger     .stat-bar-fill { background: #e8a87c; }
+.stat-happiness  .stat-bar-fill { background: #a8d5a2; }
+.stat-energy     .stat-bar-fill { background: #87b8d4; }
 
 .stat-pct {
   font-size: 0.75rem;
