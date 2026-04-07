@@ -1,4 +1,4 @@
-const CACHE_NAME = 'for-maya-v2';
+const CACHE_NAME = 'for-maya-v3';
 const ASSETS = [
   '/',
   '/index.html',
@@ -7,6 +7,7 @@ const ASSETS = [
   '/gb.js',
   '/photos/gb.png',
   '/photos/gb-eats.mp4',
+  '/photos/gb-dance.mp4',
   '/manifest.json'
 ];
 

@@ -98,8 +98,7 @@ window.GB = {
     this.state.energy    = clamp(this.state.energy - PLAY_ENERGY_COST);
     saveState(this.state);
     this.render();
-    animateGB('anim-wiggle');
-    spawnParticles(['⭐', '🤍', '✨', '⭐', '🤍']);
+    playDanceVideo();
   },
 
   render() {
@@ -149,6 +148,31 @@ function playFeedVideo() {
       video.pause();
       animateGB('anim-bounce');
       spawnParticles(['🍓', '🍓', '🍓', '🍓', '🍓']);
+    }
+  }, { once: true });
+}
+
+function playDanceVideo() {
+  const overlay = document.getElementById('play-video-overlay');
+  const video   = document.getElementById('gb-play-video');
+
+  overlay.classList.add('visible');
+  video.currentTime = 0;
+  video.play();
+
+  video.addEventListener('ended', () => {
+    overlay.classList.remove('visible');
+    video.pause();
+    animateGB('anim-wiggle');
+    spawnParticles(['⭐', '🤍', '✨', '⭐', '🤍']);
+  }, { once: true });
+
+  overlay.addEventListener('click', e => {
+    if (e.target === overlay) {
+      overlay.classList.remove('visible');
+      video.pause();
+      animateGB('anim-wiggle');
+      spawnParticles(['⭐', '🤍', '✨', '⭐', '🤍']);
     }
   }, { once: true });
 }
