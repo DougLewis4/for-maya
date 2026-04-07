@@ -10,12 +10,20 @@ const DECAY_PER_HOUR = { hunger: 4, happiness: 3 };
 const ENERGY_RESTORE_PER_HOUR = 1;
 const PLAY_ENERGY_COST = 15;
 
+function todayKey() {
+  const d = new Date();
+  return `${d.getFullYear()}-${d.getMonth()}-${d.getDate()}`;
+}
+
 function defaultState() {
   return {
-    hunger:    100,
-    happiness: 100,
-    energy:    100,
-    lastSaved: Date.now()
+    hunger:        100,
+    happiness:     100,
+    energy:        100,
+    lastSaved:     Date.now(),
+    feedCountToday: 0,
+    playCountToday: 0,
+    countDay:      todayKey()
   };
 }
 
@@ -45,7 +53,16 @@ function clamp(val) {
 // Apply time-based stat changes since the last save
 function applyDecay(state) {
   const hours = hoursBetween(state.lastSaved, Date.now());
-  if (hours < 0.05) return state; // less than 3 minutes — skip
+
+  // Reset daily counters if it's a new day
+  const today = todayKey();
+  if (state.countDay !== today) {
+    state.feedCountToday = 0;
+    state.playCountToday = 0;
+    state.countDay = today;
+  }
+
+  if (hours < 0.05) return state; // less than 3 minutes — skip decay
 
   state.hunger    = clamp(state.hunger    - DECAY_PER_HOUR.hunger    * hours);
   state.happiness = clamp(state.happiness - DECAY_PER_HOUR.happiness * hours);
@@ -57,7 +74,12 @@ function applyDecay(state) {
 }
 
 function getMood(state) {
-  const { hunger, happiness, energy } = state;
+  const { hunger, happiness, energy, feedCountToday = 0, playCountToday = 0 } = state;
+
+  // Over-fed or over-played today — playful complaints
+  if (feedCountToday > 3) return { label: 'STUFFED',  emoji: '🐑', text: "Hey, you're going to make me chubby!" };
+  if (playCountToday > 3) return { label: 'TIRED',    emoji: '😴', text: "GB needs a break to get some beauty rest." };
+
   const neglected = hunger < 25 && happiness < 25;
   if (neglected)      return { label: 'NEGLECTED', emoji: '😢', text: "GB really misses you... and dinner." };
   if (hunger < 30)    return { label: 'HUNGRY',    emoji: '🍼', text: "GB's tummy is rumbling..." };
@@ -88,6 +110,7 @@ window.GB = {
 
   feed() {
     this.state.hunger = clamp(this.state.hunger + 35);
+    this.state.feedCountToday = (this.state.feedCountToday || 0) + 1;
     saveState(this.state);
     this.render();
     playFeedVideo();
@@ -96,6 +119,7 @@ window.GB = {
   play() {
     this.state.happiness = clamp(this.state.happiness + 25);
     this.state.energy    = clamp(this.state.energy - PLAY_ENERGY_COST);
+    this.state.playCountToday = (this.state.playCountToday || 0) + 1;
     saveState(this.state);
     this.render();
     playDanceVideo();
