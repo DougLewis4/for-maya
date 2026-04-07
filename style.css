@@ -66,6 +66,50 @@ header {
   font-weight: 600;
 }
 
+/* ── Weather Strip ────────────────────────────── */
+#weather-strip {
+  display: flex;
+  align-items: center;
+  margin: 14px 20px 0;
+  background: var(--rose-light);
+  border-radius: 12px;
+  padding: 10px 0;
+}
+
+.weather-city {
+  flex: 1;
+  text-align: center;
+}
+
+.weather-divider {
+  width: 1px;
+  height: 40px;
+  background: var(--rose);
+  opacity: 0.25;
+}
+
+.weather-city-name {
+  font-size: 0.65rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--rose-dark);
+  margin-bottom: 3px;
+}
+
+.weather-temp {
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--text);
+  margin-bottom: 2px;
+}
+
+.weather-time {
+  font-size: 0.7rem;
+  color: var(--text-light);
+  letter-spacing: 0.02em;
+}
+
 /* ── Tab Bar ──────────────────────────────────── */
 .tab-bar {
   display: flex;

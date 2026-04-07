@@ -302,6 +302,84 @@ function initInstallBanner() {
   });
 }
 
+// ── Weather ───────────────────────────────────────────────────────────────
+
+const CITIES = {
+  marrakech: { lat: 31.6295, lon: -7.9811,   tz: 'Africa/Casablanca',    label: 'time-marrakech', el: 'weather-marrakech' },
+  sandiego:  { lat: 32.7157, lon: -117.1611, tz: 'America/Los_Angeles',  label: 'time-sandiego',  el: 'weather-sandiego'  }
+};
+
+const WEATHER_CACHE_KEY = 'weather_cache_v1';
+const CACHE_MAX_AGE_MS  = 3 * 60 * 60 * 1000; // refresh every 3 hours
+
+const WMO_ICONS = {
+  0: '☀️', 1: '🌤️', 2: '⛅', 3: '☁️',
+  45: '🌫️', 48: '🌫️',
+  51: '🌦️', 53: '🌦️', 55: '🌧️',
+  61: '🌧️', 63: '🌧️', 65: '🌧️',
+  71: '❄️', 73: '❄️', 75: '❄️', 77: '❄️',
+  80: '🌧️', 81: '🌧️', 82: '🌧️',
+  85: '❄️', 86: '❄️',
+  95: '⛈️', 96: '⛈️', 99: '⛈️'
+};
+
+function weatherIcon(code) {
+  return WMO_ICONS[code] || '🌡️';
+}
+
+async function fetchWeather(city) {
+  const url = `https://api.open-meteo.com/v1/forecast?latitude=${city.lat}&longitude=${city.lon}&current=temperature_2m,weather_code&temperature_unit=fahrenheit&timezone=auto`;
+  const res  = await fetch(url);
+  const data = await res.json();
+  return {
+    temp: Math.round(data.current.temperature_2m),
+    code: data.current.weather_code
+  };
+}
+
+async function initWeather() {
+  // Load from cache first so the UI isn't blank while fetching
+  const cached = JSON.parse(localStorage.getItem(WEATHER_CACHE_KEY) || 'null');
+  if (cached) renderWeather(cached);
+
+  // Fetch fresh data if cache is missing or older than 3 hours
+  const age = cached ? Date.now() - cached.fetchedAt : Infinity;
+  if (age >= CACHE_MAX_AGE_MS) {
+    try {
+      const [mrk, sd] = await Promise.all([
+        fetchWeather(CITIES.marrakech),
+        fetchWeather(CITIES.sandiego)
+      ]);
+      const fresh = { marrakech: mrk, sandiego: sd, fetchedAt: Date.now() };
+      localStorage.setItem(WEATHER_CACHE_KEY, JSON.stringify(fresh));
+      renderWeather(fresh);
+    } catch {
+      // Network unavailable — cached data (if any) stays shown
+    }
+  }
+}
+
+function renderWeather(data) {
+  for (const [key, city] of Object.entries(CITIES)) {
+    const w    = data[key];
+    const el   = document.getElementById(city.el);
+    if (!el || !w) continue;
+    el.querySelector('.weather-temp').textContent = weatherIcon(w.code) + ' ' + w.temp + '°F';
+  }
+}
+
+function updateTimes() {
+  for (const city of Object.values(CITIES)) {
+    const el = document.getElementById(city.label);
+    if (!el) continue;
+    el.textContent = new Date().toLocaleTimeString('en-US', {
+      timeZone: city.tz,
+      hour: 'numeric',
+      minute: '2-digit'
+    });
+  }
+}
+
 // ── Countdown ─────────────────────────────────────────────────────────────
 
 const TRIP_END = new Date('2026-04-19T00:00:00'); // Day 12, return flight
@@ -344,6 +422,9 @@ document.addEventListener('DOMContentLoaded', () => {
   initOverlays();
   initInstallBanner();
   document.getElementById('message-back').addEventListener('click', closeMessagePanel);
+  initWeather();
+  updateTimes();
+  setInterval(updateTimes, 30 * 1000); // refresh times every 30 seconds
   renderCountdown();
   renderMessages();
   GB.init();
