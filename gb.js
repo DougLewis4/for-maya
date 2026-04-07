@@ -118,11 +118,20 @@ window.GB = {
   }
 };
 
+const BAR_COLORS = {
+  hunger:    '#e8a87c',
+  happiness: '#a8d5a2',
+  energy:    '#87b8d4'
+};
+
 function setBar(name, value) {
   const fill = document.querySelector(`.stat-${name} .stat-bar-fill`);
   const pct  = document.querySelector(`.stat-${name} .stat-pct`);
-  if (fill) fill.style.width = value + '%';
-  if (pct)  pct.textContent  = value + '%';
+  if (fill) {
+    fill.style.width      = value + '%';
+    fill.style.background = BAR_COLORS[name];
+  }
+  if (pct) pct.textContent = value + '%';
 }
 
 function playFeedVideo() {
