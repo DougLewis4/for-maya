@@ -77,7 +77,7 @@ function getMood(state) {
   const { hunger, happiness, energy, feedCountToday = 0, playCountToday = 0 } = state;
 
   // Over-fed or over-played today — playful complaints
-  if (feedCountToday > 3) return { label: 'STUFFED',  emoji: '🐑', text: "Hey, you're going to make me chubby!" };
+  if (feedCountToday > 3) return { label: 'STUFFED',  emoji: '🤤', text: "Hey, you're going to make me chubby!" };
   if (playCountToday > 3) return { label: 'TIRED',    emoji: '😴', text: "GB needs a break to get some beauty rest." };
 
   const neglected = hunger < 25 && happiness < 25;
