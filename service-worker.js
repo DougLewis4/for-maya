@@ -6,6 +6,7 @@ const ASSETS = [
   '/app.js',
   '/gb.js',
   '/photos/gb.png',
+  '/photos/gb-eats.mp4',
   '/manifest.json'
 ];
 

@@ -119,7 +119,7 @@ window.GB = {
     this.state.lastFedAt = Date.now();
     saveState(this.state);
     this.render();
-    showFlash('🍼 +Hunger');
+    playFeedVideo();
   },
 
   play() {
@@ -129,7 +129,8 @@ window.GB = {
     this.state.lastPlayedAt = Date.now();
     saveState(this.state);
     this.render();
-    showFlash('⭐ +Happy');
+    animateGB('anim-wiggle');
+    spawnParticles(['⭐', '🤍', '✨', '⭐', '🤍']);
   },
 
   render() {
@@ -177,9 +178,69 @@ function setBar(name, value) {
   if (pct)  pct.textContent  = value + '%';
 }
 
+function playFeedVideo() {
+  const overlay = document.getElementById('feed-video-overlay');
+  const video   = document.getElementById('gb-feed-video');
+
+  overlay.classList.add('visible');
+  video.currentTime = 0;
+  video.play();
+
+  // Auto-dismiss when video finishes, then trigger the fun animations
+  video.addEventListener('ended', () => {
+    overlay.classList.remove('visible');
+    video.pause();
+    animateGB('anim-bounce');
+    spawnParticles(['🍓', '🍓', '🍓', '🍓', '🍓']);
+  }, { once: true });
+
+  // Also allow tapping the backdrop to skip
+  overlay.addEventListener('click', e => {
+    if (e.target === overlay) {
+      overlay.classList.remove('visible');
+      video.pause();
+      animateGB('anim-bounce');
+      spawnParticles(['🍓', '🍓', '🍓', '🍓', '🍓']);
+    }
+  }, { once: true });
+}
+
 function showFlash(text) {
   const el = document.getElementById('feed-flash');
   el.textContent = text;
   el.classList.add('show');
   setTimeout(() => el.classList.remove('show'), 900);
+}
+
+// Animate the GB photo with a named class, then remove it so it can replay
+function animateGB(animClass) {
+  const photo = document.getElementById('gb-photo');
+  photo.classList.remove('anim-bounce', 'anim-wiggle');
+  // Force reflow so removing + re-adding the class restarts the animation
+  void photo.offsetWidth;
+  photo.classList.add(animClass);
+  photo.addEventListener('animationend', () => photo.classList.remove(animClass), { once: true });
+}
+
+// Spawn emoji particles floating up from GB's photo position
+function spawnParticles(emojis) {
+  const photo = document.getElementById('gb-photo');
+  const rect  = photo.getBoundingClientRect();
+  const cx    = rect.left + rect.width  / 2;
+  const cy    = rect.top  + rect.height / 2;
+
+  emojis.forEach((emoji, i) => {
+    setTimeout(() => {
+      const el = document.createElement('div');
+      el.className   = 'gb-particle';
+      el.textContent = emoji;
+      // Random horizontal drift so particles fan out
+      const dx = (Math.random() - 0.5) * 70;
+      el.style.setProperty('--dx', dx + 'px');
+      el.style.left = (cx + dx * 0.2) + 'px';
+      el.style.top  = cy + 'px';
+      document.body.appendChild(el);
+      el.addEventListener('animationend', () => el.remove(), { once: true });
+    }, i * 80);
+  });
 }
