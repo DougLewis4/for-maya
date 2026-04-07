@@ -1,6 +1,5 @@
 // ── GB Tamagotchi Logic ────────────────────────────────────────────────────
-// Stats decay every hour. Maya can feed/play every 5 hours.
-// Skipping one session causes a slow decline; skipping two causes warning states.
+// Stats decay every hour. Maya can feed/play anytime — no cooldown.
 
 const GB_KEY = 'gb_state_v1';
 
@@ -11,18 +10,12 @@ const DECAY_PER_HOUR = { hunger: 4, happiness: 3 };
 const ENERGY_RESTORE_PER_HOUR = 1;
 const PLAY_ENERGY_COST = 15;
 
-// How long Maya must wait before she can feed/play again
-const FEED_COOLDOWN_MS = 5 * 60 * 60 * 1000; // 5 hours
-const PLAY_COOLDOWN_MS = 5 * 60 * 60 * 1000; // 5 hours
-
 function defaultState() {
   return {
-    hunger:      100,
-    happiness:   100,
-    energy:      100,
-    lastSaved:   Date.now(),
-    lastFedAt:   null,
-    lastPlayedAt: null
+    hunger:    100,
+    happiness: 100,
+    energy:    100,
+    lastSaved: Date.now()
   };
 }
 
@@ -63,26 +56,6 @@ function applyDecay(state) {
   return state;
 }
 
-function canFeed(state) {
-  if (!state.lastFedAt) return true;
-  return Date.now() - state.lastFedAt >= FEED_COOLDOWN_MS;
-}
-
-function canPlay(state) {
-  if (!state.lastPlayedAt) return true;
-  return Date.now() - state.lastPlayedAt >= PLAY_COOLDOWN_MS;
-}
-
-// Returns a human-readable "ready in X hrs Y mins" string
-function cooldownRemaining(lastActionAt, cooldownMs) {
-  const remaining = cooldownMs - (Date.now() - lastActionAt);
-  if (remaining <= 0) return null;
-  const hrs  = Math.floor(remaining / (1000 * 60 * 60));
-  const mins = Math.floor((remaining % (1000 * 60 * 60)) / (1000 * 60));
-  if (hrs > 0) return `${hrs}h ${mins}m`;
-  return `${mins}m`;
-}
-
 function getMood(state) {
   const { hunger, happiness, energy } = state;
   const neglected = hunger < 25 && happiness < 25;
@@ -105,7 +78,7 @@ window.GB = {
     saveState(this.state);
     this.render();
 
-    // Re-render every minute so cooldown timers stay accurate
+    // Re-render every minute so stats stay current
     setInterval(() => {
       this.state = applyDecay(loadState());
       saveState(this.state);
@@ -114,19 +87,15 @@ window.GB = {
   },
 
   feed() {
-    if (!canFeed(this.state)) return;
-    this.state.hunger    = clamp(this.state.hunger + 35);
-    this.state.lastFedAt = Date.now();
+    this.state.hunger = clamp(this.state.hunger + 35);
     saveState(this.state);
     this.render();
     playFeedVideo();
   },
 
   play() {
-    if (!canPlay(this.state)) return;
-    this.state.happiness  = clamp(this.state.happiness + 25);
-    this.state.energy     = clamp(this.state.energy - PLAY_ENERGY_COST);
-    this.state.lastPlayedAt = Date.now();
+    this.state.happiness = clamp(this.state.happiness + 25);
+    this.state.energy    = clamp(this.state.energy - PLAY_ENERGY_COST);
     saveState(this.state);
     this.render();
     animateGB('anim-wiggle');
@@ -144,30 +113,9 @@ window.GB = {
     setBar('happiness', s.happiness);
     setBar('energy',    s.energy);
 
-    // Feed button: disabled + shows countdown while on cooldown
-    const feedBtn  = document.getElementById('btn-feed');
-    const feedReady = canFeed(s);
-    feedBtn.disabled = !feedReady;
-    feedBtn.textContent = feedReady
-      ? '🍼 Feed GB'
-      : '🍼 ' + cooldownRemaining(s.lastFedAt, FEED_COOLDOWN_MS);
-
-    // Play button: disabled + shows countdown while on cooldown
-    const playBtn  = document.getElementById('btn-play');
-    const playReady = canPlay(s);
-    playBtn.disabled = !playReady;
-    playBtn.textContent = playReady
-      ? '⭐ Play'
-      : '⭐ ' + cooldownRemaining(s.lastPlayedAt, PLAY_COOLDOWN_MS);
-
-    // Status line
-    const parts = [];
-    if (!feedReady) parts.push('fed');
-    if (!playReady) parts.push('played');
-    const statusEl = document.getElementById('gb-last-fed');
-    statusEl.textContent = parts.length
-      ? `Recently ${parts.join(' & ')} GB ♡`
-      : 'GB needs attention!';
+    document.getElementById('btn-feed').textContent = '🍼 Feed GB';
+    document.getElementById('btn-play').textContent = '⭐ Play';
+    document.getElementById('gb-last-fed').textContent = 'Tap to feed or play with GB ♡';
   }
 };
 
@@ -186,7 +134,7 @@ function playFeedVideo() {
   video.currentTime = 0;
   video.play();
 
-  // Auto-dismiss when video finishes, then trigger the fun animations
+  // Auto-dismiss when video finishes, then trigger animations
   video.addEventListener('ended', () => {
     overlay.classList.remove('visible');
     video.pause();
@@ -194,7 +142,7 @@ function playFeedVideo() {
     spawnParticles(['🍓', '🍓', '🍓', '🍓', '🍓']);
   }, { once: true });
 
-  // Also allow tapping the backdrop to skip
+  // Tapping the dark backdrop skips the video
   overlay.addEventListener('click', e => {
     if (e.target === overlay) {
       overlay.classList.remove('visible');
@@ -205,19 +153,11 @@ function playFeedVideo() {
   }, { once: true });
 }
 
-function showFlash(text) {
-  const el = document.getElementById('feed-flash');
-  el.textContent = text;
-  el.classList.add('show');
-  setTimeout(() => el.classList.remove('show'), 900);
-}
-
 // Animate the GB photo with a named class, then remove it so it can replay
 function animateGB(animClass) {
   const photo = document.getElementById('gb-photo');
   photo.classList.remove('anim-bounce', 'anim-wiggle');
-  // Force reflow so removing + re-adding the class restarts the animation
-  void photo.offsetWidth;
+  void photo.offsetWidth; // force reflow so the animation restarts cleanly
   photo.classList.add(animClass);
   photo.addEventListener('animationend', () => photo.classList.remove(animClass), { once: true });
 }
@@ -234,7 +174,6 @@ function spawnParticles(emojis) {
       const el = document.createElement('div');
       el.className   = 'gb-particle';
       el.textContent = emoji;
-      // Random horizontal drift so particles fan out
       const dx = (Math.random() - 0.5) * 70;
       el.style.setProperty('--dx', dx + 'px');
       el.style.left = (cx + dx * 0.2) + 'px';
