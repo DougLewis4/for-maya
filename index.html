@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="default">
+  <meta name="apple-mobile-web-app-title" content="For Maya">
+  <meta name="theme-color" content="#c9847a">
+  <link rel="manifest" href="manifest.json">
+  <link rel="apple-touch-icon" href="photos/gb.png">
+  <title>For Maya ♡</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <!-- Install banner (only appears on iPhone Safari before install) -->
+  <div id="install-banner">
+    Tap <strong>⬆ Share</strong> then <strong>"Add to Home Screen"</strong> to save this as an app
+    <button id="banner-close" aria-label="Dismiss">✕</button>
+  </div>
+
+  <div id="app">
+
+    <!-- Header -->
+    <header>
+      <h1 id="app-title">For Maya <span>♡</span></h1>
+    </header>
+
+    <!-- Tab bar -->
+    <nav class="tab-bar" role="tablist">
+      <button class="tab-btn active" data-tab="tab-messages" role="tab">Messages</button>
+      <button class="tab-btn"        data-tab="tab-gb"       role="tab">GB 🐑</button>
+    </nav>
+
+    <!-- ── Tab 1: Daily Messages ─────────────────────────────── -->
+    <div class="tab-content">
+
+      <div id="tab-messages" class="tab-pane active" role="tabpanel">
+        <div id="messages-list"></div>
+      </div>
+
+      <!-- ── Tab 2: GB Tamagotchi ──────────────────────────────── -->
+      <div id="tab-gb" class="tab-pane" role="tabpanel">
+        <div class="gb-card">
+
+          <!-- GB's photo -->
+          <div class="gb-photo-wrap">
+            <img
+              id="gb-photo"
+              src="photos/gb.png"
+              alt="GB the lamb"
+              class="gb-photo"
+              draggable="false"
+            >
+            <div id="gb-mood-badge" class="gb-mood-badge">🌟</div>
+          </div>
+
+          <div class="gb-name">GB</div>
+          <div id="gb-mood-text" class="gb-mood-text">GB is happy and loved!</div>
+
+          <!-- Stat bars -->
+          <div class="stats">
+            <div class="stat-row stat-hunger">
+              <div class="stat-label">Hunger</div>
+              <div class="stat-bar-bg">
+                <div class="stat-bar-fill" style="width: 100%"></div>
+              </div>
+              <div class="stat-pct">100%</div>
+            </div>
+            <div class="stat-row stat-happiness">
+              <div class="stat-label">Happiness</div>
+              <div class="stat-bar-bg">
+                <div class="stat-bar-fill" style="width: 100%"></div>
+              </div>
+              <div class="stat-pct">100%</div>
+            </div>
+            <div class="stat-row stat-energy">
+              <div class="stat-label">Energy</div>
+              <div class="stat-bar-bg">
+                <div class="stat-bar-fill" style="width: 100%"></div>
+              </div>
+              <div class="stat-pct">100%</div>
+            </div>
+          </div>
+
+          <!-- Action buttons -->
+          <div class="action-btns">
+            <button id="btn-feed" class="btn btn-feed" onclick="GB.feed()">🍼 Feed GB</button>
+            <button id="btn-play" class="btn btn-play" onclick="GB.play()">⭐ Play</button>
+          </div>
+
+          <p id="gb-last-fed" class="last-fed">GB is waiting for you...</p>
+        </div>
+      </div>
+
+    </div><!-- /tab-content -->
+
+  </div><!-- /app -->
+
+  <!-- ── Overlays ─────────────────────────────────────────────── -->
+
+  <!-- Easter egg: secret message (tap title 5x) -->
+  <div id="secret-overlay" class="overlay" role="dialog" aria-modal="true">
+    <div class="overlay-box">
+      <h2 id="secret-title"></h2>
+      <p  id="secret-message"></p>
+      <button class="overlay-close">Close</button>
+    </div>
+  </div>
+
+  <!-- Easter egg: couple photo (long-press GB) -->
+  <div id="photo-overlay" class="overlay" role="dialog" aria-modal="true">
+    <div class="overlay-box">
+      <!--
+        ✏️ DOUG: Replace "photos/us.jpg" with your actual photo filename.
+           Drop the photo into the /photos/ folder in this project.
+      -->
+      <img src="photos/us.jpg" alt="Us" class="overlay-photo" onerror="this.style.display='none'">
+      <p style="font-family: Georgia, serif; font-style: italic;">Missing you ♡</p>
+      <button class="overlay-close">Close</button>
+    </div>
+  </div>
+
+  <!-- Flash feedback (feed/play animations) -->
+  <div id="feed-flash" class="feed-flash"></div>
+
+  <script src="gb.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>

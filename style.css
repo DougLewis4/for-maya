@@ -1,0 +1,460 @@
+/* ── Reset & Base ─────────────────────────────── */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --rose:       #c9847a;
+  --rose-light: #f5e8e6;
+  --rose-dark:  #a86560;
+  --grey:       #e8e8e8;
+  --grey-text:  #aaa;
+  --text:       #2c2c2c;
+  --text-light: #666;
+  --white:      #ffffff;
+  --radius:     16px;
+  --font-serif: Georgia, 'Times New Roman', serif;
+  --font-sans:  -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+}
+
+html, body {
+  height: 100%;
+  background: var(--white);
+  color: var(--text);
+  font-family: var(--font-sans);
+  -webkit-font-smoothing: antialiased;
+  overscroll-behavior: none;
+}
+
+/* ── App Shell ────────────────────────────────── */
+#app {
+  max-width: 430px;
+  margin: 0 auto;
+  min-height: 100dvh;
+  display: flex;
+  flex-direction: column;
+}
+
+/* ── Header ───────────────────────────────────── */
+header {
+  padding: 20px 20px 0;
+  text-align: center;
+  user-select: none;
+}
+
+#app-title {
+  font-family: var(--font-serif);
+  font-size: 1.6rem;
+  font-weight: normal;
+  color: var(--text);
+  letter-spacing: 0.02em;
+  cursor: default;
+}
+
+#app-title span {
+  color: var(--rose);
+}
+
+/* ── Tab Bar ──────────────────────────────────── */
+.tab-bar {
+  display: flex;
+  margin: 16px 20px 0;
+  border-bottom: 1.5px solid var(--grey);
+}
+
+.tab-btn {
+  flex: 1;
+  padding: 10px 0;
+  background: none;
+  border: none;
+  border-bottom: 2.5px solid transparent;
+  margin-bottom: -1.5px;
+  font-family: var(--font-sans);
+  font-size: 0.9rem;
+  color: var(--grey-text);
+  cursor: pointer;
+  transition: color 0.2s, border-color 0.2s;
+  letter-spacing: 0.04em;
+}
+
+.tab-btn.active {
+  color: var(--rose);
+  border-bottom-color: var(--rose);
+  font-weight: 600;
+}
+
+/* ── Content Area ─────────────────────────────── */
+.tab-content {
+  flex: 1;
+  padding: 20px;
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
+.tab-pane { display: none; }
+.tab-pane.active { display: block; }
+
+/* ── Day Cards (Messages Tab) ─────────────────── */
+.day-card {
+  background: var(--white);
+  border: 1.5px solid var(--grey);
+  border-radius: var(--radius);
+  padding: 20px;
+  margin-bottom: 14px;
+  transition: border-color 0.2s;
+}
+
+.day-card.unlocked {
+  border-color: var(--rose-light);
+  background: linear-gradient(135deg, #fff 0%, #fdf8f7 100%);
+}
+
+.day-card.flight-day {
+  border-color: #dde8f5;
+  background: linear-gradient(135deg, #fff 0%, #f5f8fd 100%);
+}
+
+.day-card.final-day {
+  border-color: var(--rose);
+  background: linear-gradient(135deg, #fdf8f7 0%, #fce8e5 100%);
+}
+
+.day-card.locked {
+  opacity: 0.5;
+}
+
+.day-label {
+  font-size: 0.7rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--grey-text);
+  margin-bottom: 8px;
+}
+
+.day-card.unlocked .day-label { color: var(--rose); }
+.day-card.flight-day .day-label { color: #6a8db8; }
+.day-card.final-day .day-label { color: var(--rose-dark); }
+
+.day-message {
+  font-family: var(--font-serif);
+  font-size: 1.05rem;
+  line-height: 1.7;
+  color: var(--text);
+}
+
+.day-locked-text {
+  font-size: 0.85rem;
+  color: var(--grey-text);
+  font-style: italic;
+}
+
+.day-date {
+  font-size: 0.75rem;
+  color: var(--grey-text);
+  margin-top: 6px;
+}
+
+/* ── GB Tab ───────────────────────────────────── */
+.gb-card {
+  background: var(--white);
+  border: 1.5px solid var(--grey);
+  border-radius: var(--radius);
+  padding: 24px 20px;
+  text-align: center;
+}
+
+.gb-photo-wrap {
+  position: relative;
+  display: inline-block;
+  margin-bottom: 20px;
+}
+
+.gb-photo {
+  width: 180px;
+  height: 180px;
+  border-radius: 50%;
+  object-fit: cover;
+  object-position: center top;
+  display: block;
+  border: 3px solid var(--rose-light);
+  box-shadow: 0 4px 20px rgba(201, 132, 122, 0.2);
+  cursor: pointer;
+  -webkit-user-select: none;
+  user-select: none;
+}
+
+.gb-mood-badge {
+  position: absolute;
+  bottom: 6px;
+  right: 6px;
+  font-size: 1.4rem;
+  background: white;
+  border-radius: 50%;
+  width: 36px;
+  height: 36px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.12);
+}
+
+.gb-name {
+  font-family: var(--font-serif);
+  font-size: 1.3rem;
+  color: var(--text);
+  margin-bottom: 4px;
+}
+
+.gb-mood-text {
+  font-size: 0.85rem;
+  color: var(--text-light);
+  margin-bottom: 20px;
+  font-style: italic;
+  min-height: 20px;
+}
+
+/* ── Stat Bars ────────────────────────────────── */
+.stats {
+  margin-bottom: 24px;
+  text-align: left;
+}
+
+.stat-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 12px;
+}
+
+.stat-label {
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--grey-text);
+  width: 72px;
+  flex-shrink: 0;
+}
+
+.stat-bar-bg {
+  flex: 1;
+  height: 8px;
+  background: var(--grey);
+  border-radius: 4px;
+  overflow: hidden;
+}
+
+.stat-bar-fill {
+  height: 100%;
+  border-radius: 4px;
+  transition: width 0.4s ease;
+}
+
+.stat-hunger  .stat-bar-fill { background: #e8a87c; }
+.stat-happy   .stat-bar-fill { background: #a8d5a2; }
+.stat-energy  .stat-bar-fill { background: #87b8d4; }
+
+.stat-pct {
+  font-size: 0.75rem;
+  color: var(--grey-text);
+  width: 30px;
+  text-align: right;
+  flex-shrink: 0;
+}
+
+/* ── Buttons ──────────────────────────────────── */
+.action-btns {
+  display: flex;
+  gap: 12px;
+  justify-content: center;
+}
+
+.btn {
+  flex: 1;
+  padding: 14px 10px;
+  border: none;
+  border-radius: 12px;
+  font-size: 0.9rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: transform 0.1s, opacity 0.15s;
+  letter-spacing: 0.03em;
+}
+
+.btn:active { transform: scale(0.96); }
+
+.btn-feed {
+  background: var(--rose-light);
+  color: var(--rose-dark);
+}
+
+.btn-play {
+  background: #e8f3e8;
+  color: #4a8a4a;
+}
+
+.btn-feed:disabled,
+.btn-play:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+.last-fed {
+  margin-top: 14px;
+  font-size: 0.75rem;
+  color: var(--grey-text);
+  text-align: center;
+}
+
+/* ── Install Banner ───────────────────────────── */
+#install-banner {
+  display: none;
+  background: var(--rose-light);
+  border-bottom: 1px solid var(--rose);
+  padding: 10px 16px;
+  text-align: center;
+  font-size: 0.8rem;
+  color: var(--rose-dark);
+  position: relative;
+}
+
+#install-banner.visible { display: block; }
+
+#install-banner button {
+  position: absolute;
+  right: 10px;
+  top: 50%;
+  transform: translateY(-50%);
+  background: none;
+  border: none;
+  font-size: 1rem;
+  color: var(--rose-dark);
+  cursor: pointer;
+  padding: 4px 6px;
+}
+
+/* ── Overlay (easter eggs & photo) ───────────── */
+.overlay {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.6);
+  z-index: 100;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+  backdrop-filter: blur(4px);
+}
+
+.overlay.visible { display: flex; }
+
+.overlay-box {
+  background: var(--white);
+  border-radius: 20px;
+  padding: 32px 24px;
+  max-width: 360px;
+  width: 100%;
+  text-align: center;
+  animation: pop-in 0.25s ease;
+}
+
+@keyframes pop-in {
+  from { transform: scale(0.9); opacity: 0; }
+  to   { transform: scale(1);   opacity: 1; }
+}
+
+.overlay-box h2 {
+  font-family: var(--font-serif);
+  font-size: 1.4rem;
+  font-weight: normal;
+  margin-bottom: 14px;
+  color: var(--text);
+}
+
+.overlay-box p {
+  font-family: var(--font-serif);
+  font-size: 1rem;
+  line-height: 1.7;
+  color: var(--text);
+  margin-bottom: 20px;
+}
+
+.overlay-photo {
+  width: 100%;
+  max-height: 260px;
+  object-fit: cover;
+  border-radius: 12px;
+  margin-bottom: 20px;
+}
+
+.overlay-close {
+  background: var(--grey);
+  border: none;
+  border-radius: 10px;
+  padding: 10px 28px;
+  font-size: 0.9rem;
+  color: var(--text-light);
+  cursor: pointer;
+}
+
+/* ── Day 12 Final Reveal ─────────────────────── */
+.final-reveal-card {
+  background: linear-gradient(160deg, #fdf3f1 0%, #fce5e1 100%);
+  border: 2px solid var(--rose);
+  border-radius: var(--radius);
+  padding: 28px 20px;
+  text-align: center;
+  margin-bottom: 14px;
+}
+
+.final-reveal-card .final-title {
+  font-family: var(--font-serif);
+  font-size: 1.6rem;
+  font-weight: normal;
+  color: var(--rose-dark);
+  margin-bottom: 12px;
+}
+
+.final-reveal-card .final-message {
+  font-family: var(--font-serif);
+  font-size: 1.1rem;
+  line-height: 1.8;
+  color: var(--text);
+}
+
+/* ── Confetti ─────────────────────────────────── */
+.confetti-piece {
+  position: fixed;
+  width: 8px;
+  height: 8px;
+  border-radius: 2px;
+  animation: confetti-fall linear forwards;
+  pointer-events: none;
+  z-index: 200;
+}
+
+@keyframes confetti-fall {
+  0%   { transform: translateY(-20px) rotate(0deg);   opacity: 1; }
+  100% { transform: translateY(100vh) rotate(720deg); opacity: 0; }
+}
+
+/* ── Feedback Flash ───────────────────────────── */
+.feed-flash {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%) scale(0.8);
+  background: var(--white);
+  border-radius: 16px;
+  padding: 16px 28px;
+  font-size: 1.8rem;
+  box-shadow: 0 8px 30px rgba(0,0,0,0.15);
+  z-index: 90;
+  opacity: 0;
+  transition: transform 0.15s ease, opacity 0.15s ease;
+  pointer-events: none;
+}
+
+.feed-flash.show {
+  transform: translate(-50%, -50%) scale(1);
+  opacity: 1;
+}
