@@ -272,6 +272,39 @@ function initInstallBanner() {
   });
 }
 
+// ── Countdown ─────────────────────────────────────────────────────────────
+
+const TRIP_END = new Date('2026-04-19T00:00:00'); // Day 12, return flight
+
+function renderCountdown() {
+  const el = document.getElementById('countdown');
+  const today = new Date();
+  today.setHours(0, 0, 0, 0);
+  const end = new Date(TRIP_END);
+  end.setHours(0, 0, 0, 0);
+
+  // Check for ?day= preview override
+  const params = new URLSearchParams(window.location.search);
+  const previewDay = parseInt(params.get('day'), 10);
+  let daysLeft;
+
+  if (!isNaN(previewDay) && previewDay >= 1 && previewDay <= 12) {
+    daysLeft = 12 - previewDay;
+  } else {
+    daysLeft = Math.floor((end - today) / (1000 * 60 * 60 * 24));
+  }
+
+  if (daysLeft > 1) {
+    el.innerHTML = '<strong>' + daysLeft + ' days</strong> until you\'re home ♡';
+  } else if (daysLeft === 1) {
+    el.innerHTML = '<strong>1 day</strong> until you\'re home ♡';
+  } else if (daysLeft === 0) {
+    el.innerHTML = 'Home today ♡';
+  } else {
+    el.innerHTML = 'Welcome home ♡';
+  }
+}
+
 // ── Boot ──────────────────────────────────────────────────────────────────
 
 document.addEventListener('DOMContentLoaded', () => {
@@ -280,6 +313,7 @@ document.addEventListener('DOMContentLoaded', () => {
   initPhotoEasterEgg();
   initOverlays();
   initInstallBanner();
+  renderCountdown();
   renderMessages();
   GB.init();
 

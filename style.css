@@ -53,6 +53,19 @@ header {
   color: var(--rose);
 }
 
+/* ── Countdown ────────────────────────────────── */
+#countdown {
+  font-size: 0.8rem;
+  color: var(--grey-text);
+  margin-top: 6px;
+  letter-spacing: 0.03em;
+}
+
+#countdown strong {
+  color: var(--rose);
+  font-weight: 600;
+}
+
 /* ── Tab Bar ──────────────────────────────────── */
 .tab-bar {
   display: flex;
