@@ -17,6 +17,7 @@
 
 html, body {
   height: 100%;
+  overflow: hidden;
   background: var(--white);
   color: var(--text);
   font-family: var(--font-sans);
@@ -28,9 +29,10 @@ html, body {
 #app {
   max-width: 430px;
   margin: 0 auto;
-  min-height: 100dvh;
+  height: 100dvh;
   display: flex;
   flex-direction: column;
+  overflow: hidden;
 }
 
 /* ── Header ───────────────────────────────────── */
