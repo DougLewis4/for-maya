@@ -101,10 +101,31 @@ function formatDate(dayNumber) {
   return d.toLocaleDateString('en-US', { month: 'long', day: 'numeric' });
 }
 
+// ── Message Detail Panel ──────────────────────────────────────────────────
+
+function openMessagePanel(entry) {
+  document.getElementById('message-panel-label').textContent = entry.label;
+  document.getElementById('message-panel-date').textContent  = formatDate(entry.day);
+  document.getElementById('message-panel-text').textContent  = entry.message;
+
+  const panel = document.getElementById('message-panel');
+  panel.removeAttribute('aria-hidden');
+  panel.classList.add('open');
+
+  if (entry.final) launchConfetti();
+}
+
+function closeMessagePanel() {
+  const panel = document.getElementById('message-panel');
+  panel.classList.remove('open');
+  panel.setAttribute('aria-hidden', 'true');
+}
+
 // ── Build a day card using safe DOM methods ───────────────────────────────
 
 function makeDayCard(entry, unlocked, currentDay) {
   const card = document.createElement('div');
+  const isToday = entry.day === currentDay;
 
   let classes = 'day-card';
   if (unlocked && entry.final)        classes += ' final-day unlocked';
@@ -119,17 +140,21 @@ function makeDayCard(entry, unlocked, currentDay) {
   card.appendChild(label);
 
   if (unlocked) {
-    const msg = document.createElement('div');
-    msg.className = 'day-message';
-    msg.textContent = entry.message;
-    card.appendChild(msg);
-
     const date = document.createElement('div');
     date.className = 'day-date';
     date.textContent = formatDate(entry.day);
     card.appendChild(date);
 
-    if (entry.final) launchConfetti();
+    const btn = document.createElement('button');
+    if (isToday) {
+      btn.className   = 'btn-unlock';
+      btn.textContent = 'Unlock today\'s message';
+    } else {
+      btn.className   = 'btn-see-more';
+      btn.textContent = 'See more →';
+    }
+    btn.addEventListener('click', () => openMessagePanel(entry));
+    card.appendChild(btn);
   } else {
     const locked = document.createElement('div');
     locked.className = 'day-locked-text';
@@ -313,6 +338,7 @@ document.addEventListener('DOMContentLoaded', () => {
   initPhotoEasterEgg();
   initOverlays();
   initInstallBanner();
+  document.getElementById('message-back').addEventListener('click', closeMessagePanel);
   renderCountdown();
   renderMessages();
   GB.init();
