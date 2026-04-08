@@ -1,4 +1,4 @@
-const CACHE_NAME = 'for-maya-v6';
+const CACHE_NAME = 'for-maya-v7';
 
 // Media files: cache-first (large, never change, need offline access)
 const MEDIA_ASSETS = [
@@ -30,7 +30,14 @@ self.addEventListener('activate', event => {
 // - Everything else (HTML/JS/CSS): network-first with cache fallback
 self.addEventListener('fetch', event => {
   const url = event.request.url;
-  const isMedia = /\.(png|jpg|jpeg|mp4|webm|gif)$/i.test(url);
+  const isMessages = url.includes('messages.js');
+  const isMedia    = /\.(png|jpg|jpeg|mp4|webm|gif)$/i.test(url);
+
+  // messages.js is never cached — always fetch fresh so day updates appear instantly
+  if (isMessages) {
+    event.respondWith(fetch(event.request));
+    return;
+  }
 
   if (isMedia) {
     // Cache-first: serve instantly from cache, fall back to network

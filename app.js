@@ -1,83 +1,9 @@
 // ── Morocco App — Messages & Easter Eggs ──────────────────────────────────
 // Trip: April 8–19, 2026. Day 1 = outbound flight, Day 12 = return flight.
+// ✏️ Edit messages in messages.js — that file is never cached so updates
+//    show up on Maya's phone instantly.
 
 const TRIP_START = new Date('2026-04-08T00:00:00'); // Day 1
-
-// ── ✏️ DOUG'S MESSAGES ────────────────────────────────────────────────────
-// Fill in each message below. Placeholders marked with ✏️
-// Days 1 and 12 are flight days. Day 12 is the big final reveal.
-
-const MESSAGES = [
-  {
-    day: 1,
-    flight: true,
-    label: '✈️ Flight Day',
-    message: 'Safe travels today! Sam and I miss you already!'
-  },
-  {
-    day: 2,
-    label: 'Day 2',
-    message: '✏️ YOUR MESSAGE FOR DAY 2'
-  },
-  {
-    day: 3,
-    label: 'Day 3',
-    message: '✏️ YOUR MESSAGE FOR DAY 3'
-  },
-  {
-    day: 4,
-    label: 'Day 4',
-    message: '✏️ YOUR MESSAGE FOR DAY 4'
-  },
-  {
-    day: 5,
-    label: 'Day 5',
-    message: '✏️ YOUR MESSAGE FOR DAY 5'
-  },
-  {
-    day: 6,
-    label: 'Day 6',
-    message: '✏️ YOUR MESSAGE FOR DAY 6'
-  },
-  {
-    day: 7,
-    label: 'Day 7',
-    message: '✏️ YOUR MESSAGE FOR DAY 7'
-  },
-  {
-    day: 8,
-    label: 'Day 8',
-    message: '✏️ YOUR MESSAGE FOR DAY 8'
-  },
-  {
-    day: 9,
-    label: 'Day 9',
-    message: '✏️ YOUR MESSAGE FOR DAY 9'
-  },
-  {
-    day: 10,
-    label: 'Day 10',
-    message: '✏️ YOUR MESSAGE FOR DAY 10'
-  },
-  {
-    day: 11,
-    label: 'Day 11',
-    message: '✏️ YOUR MESSAGE FOR DAY 11'
-  },
-  {
-    day: 12,
-    flight: true,
-    final: true,
-    label: '✈️ Welcome Home',
-    message: '✏️ YOUR FINAL DAY MESSAGE (she\'s on her way home!)'
-  }
-];
-
-// ── ✏️ EASTER EGG: Secret message (tap title 5x) ────────────────────────
-const SECRET_MESSAGE = {
-  title:   '✏️ SECRET TITLE',
-  message: '✏️ YOUR HIDDEN MESSAGE (shown when Maya taps the title 5 times)'
-};
 
 // ── Date Helpers ──────────────────────────────────────────────────────────
 
