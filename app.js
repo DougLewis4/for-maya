@@ -430,6 +430,6 @@ document.addEventListener('DOMContentLoaded', () => {
   GB.init();
 
   if ('serviceWorker' in navigator) {
-    navigator.serviceWorker.register('/service-worker.js').catch(() => {});
+    navigator.serviceWorker.register('/for-maya/service-worker.js').catch(() => {});
   }
 });
