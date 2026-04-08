@@ -12,7 +12,7 @@ const MESSAGES = [
     day: 1,
     flight: true,
     label: '✈️ Flight Day',
-    message: '✏️ YOUR MESSAGE FOR DAY 1 (FLIGHT DAY — she\'s on her way!)'
+    message: 'Safe travels today! Sam and I miss you already!'
   },
   {
     day: 2,
