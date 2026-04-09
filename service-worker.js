@@ -1,4 +1,4 @@
-const CACHE_NAME = 'for-maya-v7';
+const CACHE_NAME = 'for-maya-v8';
 
 // Media files: cache-first (large, never change, need offline access)
 const MEDIA_ASSETS = [
