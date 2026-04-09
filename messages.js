@@ -12,12 +12,12 @@ const MESSAGES = [
   {
     day: 2,
     label: 'Day 2',
-    message: 'You made it! '
+    message: 'You made it! I hope you have a great first day! Send lots of pics! Love you!'
   },
   {
     day: 3,
     label: 'Day 3',
-    message: '✏️ YOUR MESSAGE FOR DAY 3'
+    message: 'I hope you're taking good care of GB so far! Lots of pottery time planned for me today :P'
   },
   {
     day: 4,
