@@ -1,9 +1,24 @@
 // ── Morocco App — Messages & Easter Eggs ──────────────────────────────────
 // Trip: April 8–19, 2026. Day 1 = outbound flight, Day 12 = return flight.
-// ✏️ Edit messages in messages.js — that file is never cached so updates
-//    show up on Maya's phone instantly.
+// ✏️ Edit messages in messages.json — fetched fresh every time, never cached.
 
 const TRIP_START = new Date('2026-04-08T00:00:00'); // Day 1
+
+// Loaded from messages.json at startup — populated before anything renders
+let MESSAGES      = [];
+let SECRET_MESSAGE = { title: '', message: '' };
+
+async function loadMessages() {
+  try {
+    const res  = await fetch('messages.json', { cache: 'no-store' });
+    const data = await res.json();
+    MESSAGES       = data.days;
+    SECRET_MESSAGE = data.secret;
+  } catch {
+    // If fetch fails (offline with no prior load), MESSAGES stays empty
+    // and the app shows locked cards gracefully
+  }
+}
 
 // ── Date Helpers ──────────────────────────────────────────────────────────
 
@@ -341,7 +356,7 @@ function renderCountdown() {
 
 // ── Boot ──────────────────────────────────────────────────────────────────
 
-document.addEventListener('DOMContentLoaded', () => {
+document.addEventListener('DOMContentLoaded', async () => {
   initTabs();
   initTitleEasterEgg();
   initPhotoEasterEgg();
@@ -352,6 +367,7 @@ document.addEventListener('DOMContentLoaded', () => {
   updateTimes();
   setInterval(updateTimes, 30 * 1000); // refresh times every 30 seconds
   renderCountdown();
+  await loadMessages(); // wait for fresh messages before rendering
   renderMessages();
   GB.init();
 
