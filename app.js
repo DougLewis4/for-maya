@@ -10,7 +10,7 @@ let SECRET_MESSAGE = { title: '', message: '' };
 
 async function loadMessages() {
   try {
-    const res  = await fetch('messages.json', { cache: 'no-store' });
+    const res  = await fetch('messages.json?v=' + Date.now(), { cache: 'no-store' });
     const data = await res.json();
     MESSAGES       = data.days;
     SECRET_MESSAGE = data.secret;
