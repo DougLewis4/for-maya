@@ -55,11 +55,13 @@ function openMessagePanel(entry) {
   document.getElementById('message-panel-text').textContent  = entry.message;
 
   const songBtn = document.getElementById('message-panel-song');
-  if (entry.song) {
-    songBtn.href         = entry.song;
-    songBtn.style.display = 'flex';
-  } else {
-    songBtn.style.display = 'none';
+  if (songBtn) {
+    if (entry.song) {
+      songBtn.href         = entry.song;
+      songBtn.style.display = 'flex';
+    } else {
+      songBtn.style.display = 'none';
+    }
   }
 
   const panel = document.getElementById('message-panel');
