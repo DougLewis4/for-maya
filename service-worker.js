@@ -1,4 +1,4 @@
-const CACHE_NAME = 'for-maya-v9';
+const CACHE_NAME = 'for-maya-v10';
 
 // Media files: cache-first (large, never change, need offline access)
 const MEDIA_ASSETS = [
@@ -26,15 +26,15 @@ self.addEventListener('activate', event => {
 });
 
 // Fetch strategy:
-// - Media files (images/video): cache-first
-// - Everything else (HTML/JS/CSS): network-first with cache fallback
+// - Code files (HTML/JS/JSON): never cached — always fetch fresh so updates appear instantly
+// - Media files (images/video): cache-first (large files that never change)
 self.addEventListener('fetch', event => {
   const url = event.request.url;
-  const isMessages = url.includes('messages.js');
-  const isMedia    = /\.(png|jpg|jpeg|mp4|webm|gif)$/i.test(url);
+  const isCode  = /\.(html|js|json)(\?.*)?$/.test(url) || url.endsWith('/for-maya/') || url.endsWith('/for-maya');
+  const isMedia = /\.(png|jpg|jpeg|mp4|webm|gif)$/i.test(url);
 
-  // messages.js is never cached — always fetch fresh so day updates appear instantly
-  if (isMessages) {
+  // Code files are never cached — always fetch fresh
+  if (isCode) {
     event.respondWith(fetch(event.request));
     return;
   }
@@ -51,7 +51,7 @@ self.addEventListener('fetch', event => {
       })
     );
   } else {
-    // Network-first: always try to get fresh code, fall back to cache if offline
+    // Everything else: network-first with cache fallback
     event.respondWith(
       fetch(event.request)
         .then(response => {
