@@ -4,7 +4,7 @@
     "message": "✏️ YOUR HIDDEN MESSAGE (shown when Maya taps the title 5 times)"
   },
   "days": [
-    { "day": 1, "flight": true, "label": "✈️ Flight Day", "message": "Safe travels today! Sam and I miss you already!" },
+    { "day": 1, "flight": true, "label": "✈️ Flight Day", "message": "Safe travels today! Sam and I miss you already!", "song": "https://open.spotify.com/track/41sGGCCoHI2GLV9qadX80A?si=f5277e44e4ae4bba" },
     { "day": 2, "label": "Day 2", "message": "You made it! I hope you have a great first day! Send lots of pics! Love you!" },
     { "day": 3, "label": "Day 3", "message": "I hope you're taking good care of GB so far! Lots of pottery time planned for me today :P" },
     { "day": 4, "label": "Day 4", "message": "I can't wait to go to the Olympics with you! Hurry up and come home so we can celebrate getting tickets :)" },
