@@ -11,8 +11,8 @@
     { "day": 5, "label": "Day 5", "message": "Happy Sunday! I'm adding some stuff to your app. Hope you like it!", "song": "https://open.spotify.com/track/5Ds0VGkTSQ1jf4KzLUpZPb?si=1cfe6bdf8f074e39" },
     { "day": 6, "label": "Day 6", "message": "Only a week left! Not that I'm counting down the days or anything ;)", "song": "https://open.spotify.com/track/3gbwcu7E9ACpJsLm7vEpuN?si=2fc02cceb3f24bb0" },
     { "day": 7, "label": "Day 7", "message": "I hope you have a great hike today! I miss you more each day! Love you!", "song": "https://open.spotify.com/track/4WUcNkpoNSKoe5MUuyzrfC?si=af6777d962cc4e0a" },
-    { "day": 8, "label": "Day 8", "message": "✏️ YOUR MESSAGE FOR DAY 8", "song": "https://open.spotify.com/track/3BSi5qoJGLab7rn7zfmTPA?si=c8e2e09fc74e4c3b" },
-    { "day": 9, "label": "Day 9", "message": "✏️ YOUR MESSAGE FOR DAY 9", "song": "https://open.spotify.com/track/38zsOOcu31XbbYj9BIPUF1?si=4394ae45825d473d" },
+    { "day": 8, "label": "Day 8", "message": "Sorry the message was missing yesterday. I see you went back and looked anyway just in case ;) Love you!", "song": "https://open.spotify.com/track/3BSi5qoJGLab7rn7zfmTPA?si=c8e2e09fc74e4c3b" },
+    { "day": 9, "label": "Day 9", "message": "Another day, another hike! Only 3 more days until you're home! I'll admit it's way less fun here without you. Love you and miss you!", "song": "https://open.spotify.com/track/38zsOOcu31XbbYj9BIPUF1?si=4394ae45825d473d" },
     { "day": 10, "label": "Day 10", "message": "✏️ YOUR MESSAGE FOR DAY 10", "song": "https://open.spotify.com/track/5zA8vzDGqPl2AzZkEYQGKh?si=c35029059e2141c2" },
     { "day": 11, "label": "Day 11", "message": "✏️ YOUR MESSAGE FOR DAY 11", "song": "https://open.spotify.com/track/4VOCfsZbHbvYLDtDocU9uo?si=4478ef88fe204ab5" },
     { "day": 12, "flight": true, "final": true, "label": "✈️ FINALLY!", "message": "Today's the best day! I can't wait to see you. Hurry up and come home! Save travels! I love you!", "song": "https://open.spotify.com/track/1GcPhT7osBb4LEJnQ0tmfj?si=f0e69f2a9fa5422d" }
