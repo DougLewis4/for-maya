@@ -54,11 +54,12 @@ function clamp(val) {
 function applyDecay(state) {
   const hours = hoursBetween(state.lastSaved, Date.now());
 
-  // Reset daily counters if it's a new day
+  // Reset daily counters and restore energy if it's a new day (GB slept!)
   const today = todayKey();
   if (state.countDay !== today) {
     state.feedCountToday = 0;
     state.playCountToday = 0;
+    state.energy  = 100;
     state.countDay = today;
   }
 
@@ -66,9 +67,6 @@ function applyDecay(state) {
 
   state.hunger    = clamp(state.hunger    - DECAY_PER_HOUR.hunger    * hours);
   state.happiness = clamp(state.happiness - DECAY_PER_HOUR.happiness * hours);
-
-  // Energy refills passively (rest/sleep), capped at 100
-  state.energy = clamp(state.energy + ENERGY_RESTORE_PER_HOUR * hours);
 
   return state;
 }
