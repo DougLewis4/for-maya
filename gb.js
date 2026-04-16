@@ -7,7 +7,7 @@ const GB_KEY = 'gb_state_v1';
 const DECAY_PER_HOUR = { hunger: 4, happiness: 3 };
 
 // Energy slowly refills on its own (she "rests"); playing costs energy
-const ENERGY_RESTORE_PER_HOUR = 1;
+const ENERGY_RESTORE_PER_HOUR = 5;
 const PLAY_ENERGY_COST = 15;
 
 function todayKey() {
@@ -67,6 +67,7 @@ function applyDecay(state) {
 
   state.hunger    = clamp(state.hunger    - DECAY_PER_HOUR.hunger    * hours);
   state.happiness = clamp(state.happiness - DECAY_PER_HOUR.happiness * hours);
+  state.energy    = clamp(state.energy    + ENERGY_RESTORE_PER_HOUR  * hours);
 
   return state;
 }
